@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         self.moonPhase.moonPhase = self.phase
         self.moonPhase.setNeedsDisplay()
         
-        self.phase = self.phase + 0.005 > 1.0 ? 0.005 : self.phase + 0.005
+        self.phase = self.phase > 0.994 ? 0.005 : self.phase + 0.005
         
     }
     
@@ -31,7 +31,6 @@ class ViewController: UIViewController {
         
         NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: "nextPhase", userInfo: nil, repeats: true)
         
-        // NSTimer(timeInterval: 1, target: self, selector: "test", userInfo: nil, repeats: false)
     }
 
     
