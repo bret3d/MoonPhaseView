@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.moonPhase.shadowAlpha = 0.4
+        self.moonPhase.shadowAlpha = 0.6
         
         
         NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: "nextPhase", userInfo: nil, repeats: true)

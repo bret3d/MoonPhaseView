@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+// @IBDesignable
 
 class MoonPhaseView: UIView {
     
@@ -25,7 +25,7 @@ class MoonPhaseView: UIView {
     }
     
 
-    // needed for IB
+    // needed for IBDesignable
     override init(frame: CGRect) {
         
         self.moonPhase = 0.10
@@ -94,7 +94,7 @@ extension UIBezierPath {
         
         let bigRadius = CGFloat(fabs(lineSegmentC + lineSegmentD) / 2.0)
         
-        let bigCirclePosition = (bigRadius - fabs(lineSegmentC)) * (direction ? 1:-1 ) // needDegrees is poorly named
+        let bigCirclePosition = (bigRadius - fabs(lineSegmentC)) * (direction ? 1:-1 )
         
         // let bigCircleDistance = sqrt((bigRadius * bigRadius) - (radius * radius)) * (needDegrees ? 1:-1 ) // a^2 + b^2 = c^2 also works
         
