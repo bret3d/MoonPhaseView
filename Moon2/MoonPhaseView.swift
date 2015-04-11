@@ -8,7 +8,7 @@
 
 import UIKit
 
-// @IBDesignable
+
 
 class MoonPhaseView: UIView {
     
@@ -94,7 +94,7 @@ extension UIBezierPath {
         
         let bigRadius = CGFloat(fabs(lineSegmentC + lineSegmentD) / 2.0)
         
-        let bigCirclePosition = (bigRadius - fabs(lineSegmentC)) * (direction ? 1:-1 )
+        let bigCirclePosition = (bigRadius - fabs(lineSegmentC)) * (clockwise ? 1:-1 )
         
         // let bigCircleDistance = sqrt((bigRadius * bigRadius) - (radius * radius)) * (needDegrees ? 1:-1 ) // a^2 + b^2 = c^2 also works
         
