@@ -15,11 +15,15 @@ class MoonPhaseView: UIView {
     @IBInspectable var moonPhase:CGFloat
     
     @IBInspectable var shadowAlpha:CGFloat
+    
+    @IBInspectable var shadowColor:UIColor
+    
 
     required init(coder aDecoder: NSCoder) {
         
-        self.moonPhase = 0.10
-        self.shadowAlpha = 0.4
+        moonPhase = 0.10
+        shadowAlpha = 0.4
+        shadowColor = UIColor.blackColor()
 
         super.init(coder: aDecoder)
     }
@@ -28,8 +32,9 @@ class MoonPhaseView: UIView {
     // needed for IBDesignable
     override init(frame: CGRect) {
         
-        self.moonPhase = 0.10
-        self.shadowAlpha = 0.4
+        moonPhase = 0.10
+        shadowAlpha = 0.4
+        shadowColor = UIColor.blackColor()
         
         super.init(frame: frame)
         
@@ -42,7 +47,11 @@ class MoonPhaseView: UIView {
         // Drawing code
         
         let radius:CGFloat = (rect.size.height < rect.size.width ? rect.size.height / 2.0 : rect.size.width / 2.0) - 1.0
-        let paintColor = UIColor(white: 0.0, alpha: shadowAlpha)
+        
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        shadowColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        let paintColor = UIColor(red:r, green:g, blue: b, alpha: shadowAlpha)
         
         paintColor.setStroke()
         paintColor.setFill()
