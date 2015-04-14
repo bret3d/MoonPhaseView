@@ -76,10 +76,6 @@ class MoonPhaseView: UIView {
         
     }
     
-    
-//    func degreesToRadians(degrees:CGFloat) -> CGFloat {
-//        return (CGFloat(M_PI) * degrees) / 180.0;
-//    }
 
 }
 
