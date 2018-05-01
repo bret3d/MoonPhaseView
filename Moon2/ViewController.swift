@@ -1,45 +1,34 @@
 //
 //  ViewController.swift
-//  Moon2
+//  MoonPhase
 //
-//  Created by Bret Dahlgren on 3/30/15.
+//  Created by Bret Dahlgren on 3/25/15.
 //  Copyright (c) 2015 Bret Dahlgren. All rights reserved.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
+    
 
     @IBOutlet weak var moonPhase: MoonPhaseView!
     
-    var phase:CGFloat = 0.0
-    
-    
-    func nextPhase() {
-        self.moonPhase.moonPhase = self.phase
-        self.moonPhase.setNeedsDisplay()
-        
-        self.phase = self.phase > 0.994 ? 0.005 : self.phase + 0.005
-        
-    }
+    var timer: Timer?
+    var moonPhaseValue: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
 
-        
-        NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: "nextPhase", userInfo: nil, repeats: true)
-        
+        self.moonPhase.shadowAlpha = 0.4
+
+        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(moonPhaseUpdate), userInfo: nil, repeats: true)
     }
 
-    
-
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @objc func moonPhaseUpdate() {
+        self.moonPhase.moonPhase = self.moonPhaseValue
+        self.moonPhase.setNeedsDisplay()
+        self.moonPhaseValue = self.moonPhaseValue + 0.001 > 1.0 ? 0.0 : self.moonPhaseValue + 0.001
     }
-
 
 }
 

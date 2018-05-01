@@ -10,58 +10,58 @@ import UIKit
 
 @IBDesignable
 
+
 class MoonPhaseView: UIView {
     
-    @IBInspectable var moonPhase:CGFloat
+    @IBInspectable var moonPhase: CGFloat
     
-    @IBInspectable var shadowAlpha:CGFloat
+    @IBInspectable var shadowAlpha: CGFloat
     
-    @IBInspectable var shadowColor:UIColor
+    @IBInspectable var shadowColor: UIColor
     
-
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         
-        moonPhase = 0.10
-        shadowAlpha = 0.4
-        shadowColor = UIColor.blackColor()
-
+        self.moonPhase = 0.10
+        self.shadowAlpha = 0.4
+        self.shadowColor = UIColor.gray
         super.init(coder: aDecoder)
     }
     
-
+    
     // needed for IBDesignable
     override init(frame: CGRect) {
         
-        moonPhase = 0.10
-        shadowAlpha = 0.4
-        shadowColor = UIColor.blackColor()
-        
+        self.moonPhase = 0.10
+        self.shadowAlpha = 0.4
+        self.shadowColor = UIColor.gray
         super.init(frame: frame)
         
     }
     
     
-    // Only override drawRect: if you perform custom drawing.
-    override func drawRect(rect: CGRect) {
-
+    
+    override func draw(_ rect: CGRect) {
+        
         // Drawing code
         
-        let radius:CGFloat = (rect.size.height < rect.size.width ? rect.size.height / 2.0 : rect.size.width / 2.0) - 1.0
+        // let radius: CGFloat = (rect.size.height < rect.size.width ? rect.size.height / 2.0 : rect.size.width / 2.0) - 1.0
+        
+        let radius = bounds.midY
         
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         shadowColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-
+        
         let paintColor = UIColor(red:r, green:g, blue: b, alpha: shadowAlpha)
         
         paintColor.setStroke()
         paintColor.setFill()
         
-        let centerInBounds = CGPointMake(self.bounds.origin.x + self.bounds.size.width/2, self.bounds.origin.y + self.bounds.size.height/2)
+        let centerInBounds = CGPoint(x: bounds.midX, y: bounds.midY)
         
         // new moon around 0 and 1, also protects around erroneous cases
         if (self.moonPhase < 0.01 || self.moonPhase > 0.99 ) {
             
-            UIBezierPath(arcCenter: centerInBounds, radius: radius, startAngle: 0.0, endAngle: CGFloat(M_PI) * 2.0, clockwise: true).fill()
+            UIBezierPath(arcCenter: centerInBounds, radius: radius, startAngle: 0.0, endAngle:.pi * 2.0, clockwise: true).fill()
             
             return
         }
@@ -70,18 +70,24 @@ class MoonPhaseView: UIView {
         
         let c2 = self.moonPhase < 0.5 ? radius :  radius * (self.moonPhase - 0.75 ) * 4.0
         
-        UIBezierPath().drawMoonArc(centerInBounds, radius: radius, lineSegmentC: c1, firstArc: true  )
-                      .drawMoonArc(centerInBounds, radius: radius, lineSegmentC: c2, firstArc: false )
-                      .fill()
+        UIBezierPath().drawMoonArc(arcCenter: centerInBounds, radius: radius, lineSegmentC: c1, firstArc: true  )
+            .drawMoonArc(arcCenter: centerInBounds, radius: radius, lineSegmentC: c2, firstArc: false )
+            .fill()
         
     }
     
-
+    func degreesToRadians(_ degrees: CGFloat) -> CGFloat {
+        return (.pi * degrees) / 180.0
+    }
+    
+    func rotateShadow(_ degrees: CGFloat) {
+        transform = CGAffineTransform(rotationAngle: degreesToRadians(degrees))
+    }
 }
 
 extension UIBezierPath {
-  
-    func drawMoonArc(arcCenter:CGPoint, radius:CGFloat, lineSegmentC: CGFloat, firstArc: Bool) -> UIBezierPath {
+    
+    func drawMoonArc(arcCenter: CGPoint, radius: CGFloat, lineSegmentC: CGFloat, firstArc: Bool) -> UIBezierPath {
         
         if (lineSegmentC == 0.0) {
             return self // to avoid the divide by zero error and draw a straight line which we want anyway
@@ -101,9 +107,7 @@ extension UIBezierPath {
         
         let bigCirclePosition = (bigRadius - fabs(lineSegmentC)) * (direction ? 1:-1 )
         
-        // let bigCircleDistance = sqrt((bigRadius * bigRadius) - (radius * radius)) * (needDegrees ? 1:-1 ) // a^2 + b^2 = c^2 also works
-        
-        let dCenter = CGPointMake(arcCenter.x - bigCirclePosition, arcCenter.y)
+        let dCenter = CGPoint(x: arcCenter.x - bigCirclePosition, y: arcCenter.y)
         
         let aDegrees = CGFloat(direction ? 0:180.0)
         
@@ -111,15 +115,16 @@ extension UIBezierPath {
         
         let angle2 = degreesToRadians(aDegrees) + (asin(radius/bigRadius) * (clockwise ? 1 : -1))
         
-        self.addArcWithCenter(dCenter, radius: bigRadius, startAngle: angle1, endAngle: angle2, clockwise: clockwise )
+        self.addArc(withCenter: dCenter, radius: bigRadius, startAngle: angle1, endAngle: angle2, clockwise: clockwise )
         
         return self
         
     }
     
-    func degreesToRadians(degrees:CGFloat) -> CGFloat {
-        return (CGFloat(M_PI) * degrees) / 180.0
+    func degreesToRadians(_ degrees: CGFloat) -> CGFloat {
+        return (.pi * degrees) / 180.0
     }
     
 }
-    
+
+
